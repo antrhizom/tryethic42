@@ -51,20 +51,17 @@
       'home': 'initial-content',
       'ethikfilter': 'ethikfilter/index.html',
       'grundlagenethik': 'grundlagenethik/index.html',
-      'szenarien': 'szenarien/index.html',
-      'digitaltransform': 'szenarien/digitaltransform.html'
+      'szenarien': 'szenarien/index.html'
     };
-
+    
     const app = document.getElementById("app");
     const navLinks = document.querySelectorAll(".site-nav a");
 
     const initialContent = `
       <section class="hero">
-        <h1>Ethische Szenarien zur Digitalen Transformation</h1>
+        <h1>Interaktive Ethik-Seite mit Vibe Coding</h1>
         <p class="lead">
-          Diese Lernumgebung zeigt, wie unterschiedliche <b>ethische Positionen</b> wirken,
-          welche <b>herausfordernden Situationen</b> durch die digitale Transformation entstehen
-          und wie du diese mithilfe <b>ethischer Prinzipien</b> beurteilen und klären kannst.
+          Die fortschreitende digitale Transformation, insbesondere die Entwicklung und Verbreitung von Künstlicher Intelligenz, stellt Lernende vor ganz neue ethische Herausforderungen. Um sie in dieser Komplexität zu entlasten, entsteht mit Vibe Coding eine interaktive Ethik-Webseite. Dort können aktuelle ethische Fragen, Szenarien und Dilemmas dynamisch eingestellt und gemeinsam mit klassischen Prinzipien (Utilitarismus, Deontologie, Tugendethik) bearbeitet werden. Die KI ist als virtueller Ratgeber direkt in die HTML-Seite integriert und wird auf Github laufend implementiert und weiterentwickelt. Die Plattform passt sich flexibel an neue Herausforderungen und Themen an.
         </p>
         <div class="hero-actions">
           <a class="button primary" href="#szenarien">Zu den Szenarien</a>
@@ -72,54 +69,27 @@
         </div>
       </section>
 
-      <section class="intro grid-2">
-        <div class="card">
-          <h2>Was machen wir hier?</h2>
+      <section class="intro project-info">
+        <article class="card">
+          <h2>Innovationspotenzial</h2>
           <p>
-            Du analysierst reale Dilemmata der digitalen Welt (z.&nbsp;B. KI im Recruiting,
-            Überwachung, algorithmischer Bias) und wendest drei Blickwinkel an:
-            <span class="tag">Deontologie</span>, <span class="tag">Utilitarismus</span>,
-            <span class="tag">Tugendethik</span>.
+            Vibe Coding ermöglicht einen agilen, dialogbasierten Entwicklungsprozess: Die Inhalte der Seite entstehen iterativ auf Basis natürlicher Sprache, wodurch Lernende auch ohne Programmierkenntnisse an der Plattform arbeiten und deren Weiterentwicklung mitgestalten können. Die Plattform stellt damit eine innovative Verbindung von digitaler Usability, technischem Fortschritt und pädagogischer Reflexion dar.
           </p>
-          <div class="callout info">
-            <strong>Ziel:</strong> begründete Urteile fällen, Perspektiven abwägen,
-            Handlungsoptionen formulieren.
-          </div>
-        </div>
-
-        <div class="card">
-          <h2>Wie arbeitest du?</h2>
-          <ol class="tight">
-            <li>Wähle ein <b>Szenario</b> und lies die Beschreibung.</li>
-            <li>Analysiere mit <b>Ethikfilter</b> &amp; <b>Grundlagenethik</b>.</li>
-            <li>Beantworte Reflexionsfragen, leite <b>Prinzipien</b> ab.</li>
-            <li>Formuliere eine <b>empfohlene Entscheidung</b> inkl. Begründung.</li>
-          </ol>
-          <div class="callout tip">
-            <strong>Tipp:</strong> Notiere Gegenargumente sichtbar – gute Ethik
-            macht Annahmen transparent.
-          </div>
-        </div>
-      </section>
-
-      <section class="grid-3">
-        <article class="card hoverable">
-          <h3>Ethikfilter</h3>
-          <p>Kompakte Fragen, die dir helfen, blinde Flecken zu finden
-            (Fairness, Transparenz, Verantwortung, Verhältnismäßigkeit …).</p>
-          <a class="button small" href="#ethikfilter">Öffnen</a>
         </article>
-        <article class="card hoverable">
-          <h3>Grundlagenethik</h3>
-          <p>Deontologie, Utilitarismus, Tugendethik – übersichtlich erklärt
-            mit Beispielen und Formulierungs-Hilfen.</p>
-          <a class="button small" href="#grundlagenethik">Öffnen</a>
+        
+        <article class="card">
+          <h2>Didaktische Umsetzung</h2>
+          <ul class="tight">
+            <li>Lernende können jederzeit neue ethische Szenarien und Dilemmas einbringen.</li>
+            <li>Die Plattform verknüpft diese Herausforderungen automatisch mit etablierten ethischen Prinzipien und Moralvorstellungen.</li>
+            <li>Die KI gibt individuelle Rückmeldungen, unterstützt Diskussionen und zeigt verschiedene Lösungswege auf.</li>
+            <li>Das Feedback der Lernenden wird gezielt gesammelt und in regelmäßigen Zyklen von der Projektgruppe ausgewertet, um Inhalte und Usability kontinuierlich zu verbessern.</li>
+          </ul>
         </article>
-        <article class="card hoverable">
-          <h3>Szenarien</h3>
-          <p>KI-Recruiting, Gesichtserkennung im öffentlichen Raum,
-            stereotype KI-Bilder u. a. – jeweils mit Leitfragen.</p>
-          <a class="button small" href="#szenarien">Öffnen</a>
+
+        <article class="card">
+          <h2>Ergebnis</h2>
+          <p>Gemeinsam mit den Lernenden entsteht eine flexibel erweiterbare, nutzerzentrierte Ethik-Lernplattform, die den Einstieg in komplexe ethische Fragestellungen erleichtert, aktuelle technologische Entwicklungen integriert und Lernende zur aktiven Mitgestaltung befähigt.</p>
         </article>
       </section>
     `;
@@ -132,13 +102,15 @@
 
     async function loadRoute(hash) {
       setActiveLink(hash);
-      const file = ROUTES[hash.substring(1)];
+      const key = hash.substring(1);
+      const file = ROUTES[key];
 
       if (file === 'initial-content') {
         app.innerHTML = initialContent;
+        window.scrollTo({ top: 0, behavior: 'smooth' });
         return;
       }
-
+      
       app.innerHTML = `<div class="loading">Lade Inhalt …</div>`;
       try {
         const response = await fetch(file);
