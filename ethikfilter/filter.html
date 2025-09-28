@@ -1,1 +1,161 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <title>Ethikfilter anwenden</title>
+    <style>
+        /* Simple styles for better interaction */
+        .decision-option {
+            display: block;
+            width: 100%;
+            text-align: left;
+            margin-bottom: 0.75rem;
+        }
+        #result-explanation {
+            transition: opacity 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <section class="hero">
+            <h1>Ethikfilter: Was ist deine Haltung?</h1>
+            <p class="lead">Wähle ein Szenario, triff eine Entscheidung und finde heraus, welche ethische Position dahintersteckt.</p>
+        </section>
 
+        <div class="card" style="margin-bottom: 1rem;">
+            <h2>Schritt 1: Wähle ein Dilemma</h2>
+            <div id="scenario-selection">
+                <p>Wähle eine der folgenden Situationen aus:</p>
+                </div>
+        </div>
+        
+        <div id="decision-container" class="card" style="margin-bottom: 1rem; display: none;">
+            <h2 id="scenario-title"></h2>
+            <p id="scenario-description" style="color: var(--muted);"></p>
+            <hr style="border: none; border-top: 1px solid var(--line); margin: 1rem 0;">
+            <h3>Schritt 2: Wie würdest du entscheiden?</h3>
+            <div id="decision-options">
+                </div>
+        </div>
+
+        <div id="result-explanation" style="display: none;">
+            <div class="card">
+                <h2 style="margin-top: 0;">Die Haltung hinter deiner Entscheidung</h2>
+                <div id="result-content" class="callout info">
+                    </div>
+                 <button class="button small" onclick="resetFilter()" style="margin-top: 1rem;">Neues Szenario wählen</button>
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        const scenarios = {
+            'dt_1': {
+                title: 'Autonomes Fahren: Unvermeidbarer Unfall',
+                description: 'Ein autonomes Fahrzeug hat Bremsversagen und steuert auf ein Hindernis zu. Ein Ausweichmanöver ist unvermeidbar. Es muss sich zwischen zwei Optionen entscheiden: Entweder es überfährt eine einzelne Person auf der einen Spur oder eine Gruppe von fünf Personen auf der anderen Spur.',
+                options: [
+                    {
+                        text: 'In die Gruppe von fünf Personen steuern, um das Leben des Einzelnen zu retten.',
+                        ethic: 'Deontologie (Pflichtethik)',
+                        explanation: 'Diese Entscheidung folgt einer <strong>deontologischen</strong> Haltung. Hier zählt die Handlung an sich, nicht die Konsequenz. Eine mögliche Pflicht oder Regel könnte lauten: "Opfere niemals eine Minderheit für eine Mehrheit" oder "Jedes einzelne Leben ist unantastbar". Das aktive Steuern in eine Personengruppe, um eine andere zu retten, wird als moralisch falsch angesehen, unabhängig von der Anzahl der Opfer.'
+                    },
+                    {
+                        text: 'Auf die einzelne Person zusteuern, um die Gruppe von fünf Personen zu retten.',
+                        ethic: 'Utilitarismus (Nutzethik)',
+                        explanation: 'Diese Entscheidung ist klar <strong>utilitaristisch</strong>. Das Ziel ist die Maximierung des Gesamtnutzens bzw. die Minimierung des Gesamtschadens. Der Tod von einer Person ist rechnerisch "besser" als der Tod von fünf Personen. Die Konsequenz der Handlung ist das einzige, was zählt: das größtmögliche Glück (oder geringste Leid) für die größtmögliche Anzahl von Menschen.'
+                    },
+                    {
+                        text: 'Keine Entscheidung treffen und den ursprünglichen Kurs beibehalten, egal was passiert.',
+                        ethic: 'Unterlassungsprinzip / Deontologie',
+                        explanation: 'Diese Haltung kann ebenfalls <strong>deontologisch</strong> begründet sein. Das Prinzip ist hier die Unterlassung. Indem die KI nicht aktiv in das Geschehen eingreift, begeht sie keine Tötungshandlung. Sie lässt das Geschehen seinen Lauf. Die Verantwortung für die Konsequenz wird abgelehnt, da die Handlung des Eingreifens an sich vermieden wird.'
+                    }
+                ]
+            },
+            'au_2': {
+                title: 'Mobbing am Arbeitsplatz',
+                description: 'Du beobachtest seit Wochen, wie ein Kollege von einer kleinen Gruppe, zu der auch dein direkter Vorgesetzter gehört, systematisch ausgegrenzt und lächerlich gemacht wird. Du weisst, dass ein Eingreifen deine eigene Position in der Firma gefährden könnte.',
+                options: [
+                    {
+                        text: 'Du sprichst die Mobber direkt darauf an und meldest den Vorfall der Personalabteilung, auch auf die Gefahr hin, deinen Job zu verlieren.',
+                        ethic: 'Tugendethik / Deontologie',
+                        explanation: 'Diese Entscheidung kann <strong>tugendethisch</strong> oder <strong>deontologisch</strong> begründet werden. Ein <strong>tugendhafter</strong> Mensch würde aus Zivilcourage, Gerechtigkeitssinn und Mut handeln. Es geht darum, charakterliche Stärke zu zeigen. <strong>Deontologisch</strong> gesehen erfüllst du die Pflicht, Unrecht nicht zu tolerieren und für die Würde deiner Mitmenschen einzustehen, da dies eine universelle moralische Regel ist.'
+                    },
+                    {
+                        text: 'Du tust nichts, da du die negativen Konsequenzen für deine eigene Karriere und dein Arbeitsklima fürchtest.',
+                        ethic: 'Ethischer Egoismus',
+                        explanation: 'Diese Entscheidung entspricht dem <strong>ethischen Egoismus</strong>. Du stellst dein eigenes Wohl (Sicherheit des Arbeitsplatzes, Vermeidung von Konflikten) über das Wohl des gemobbten Kollegen. Die moralische Bewertung deiner Handlung richtet sich ausschliesslich nach dem Nutzen für dich selbst.'
+                    },
+                    {
+                        text: 'Du versuchst, das Gespräch mit dem betroffenen Kollegen zu suchen, ihm Unterstützung anzubieten und gemeinsam nach einer Lösung zu suchen.',
+                        ethic: 'Diskursethik / Kommunitarismus',
+                        explanation: 'Diese Haltung folgt den Prinzipien der <strong>Diskursethik</strong> und des <strong>Kommunitarismus</strong>. Anstatt einer konfrontativen oder passiven Lösung suchst du den Dialog und eine von allen Betroffenen getragene Lösung. Es geht darum, durch vernünftige Kommunikation einen Konsens zu finden und die Gemeinschaft (das Team) zu stärken, anstatt nur Regeln zu befolgen oder den Nutzen zu berechnen.'
+                    }
+                ]
+            }
+        };
+
+        const scenarioSelectionDiv = document.getElementById('scenario-selection');
+        const decisionContainer = document.getElementById('decision-container');
+        const decisionOptionsDiv = document.getElementById('decision-options');
+        const resultExplanationDiv = document.getElementById('result-explanation');
+        
+        const scenarioTitle = document.getElementById('scenario-title');
+        const scenarioDescription = document.getElementById('scenario-description');
+        const resultContent = document.getElementById('result-content');
+
+        // Load scenarios into the selection area
+        function loadScenarios() {
+            let html = '';
+            for (const key in scenarios) {
+                html += `<label style="display: block; margin-bottom: 0.5rem;">
+                           <input type="radio" name="dilemma" value="${key}" onchange="selectScenario('${key}')"> 
+                           ${scenarios[key].title}
+                         </label>`;
+            }
+            scenarioSelectionDiv.innerHTML = html;
+        }
+
+        // Called when a scenario is selected
+        function selectScenario(key) {
+            const scenario = scenarios[key];
+            scenarioTitle.textContent = scenario.title;
+            scenarioDescription.textContent = scenario.description;
+            
+            let optionsHtml = '';
+            scenario.options.forEach((option, index) => {
+                optionsHtml += `<button class="button decision-option" onclick="showResult('${key}', ${index})">${option.text}</button>`;
+            });
+            decisionOptionsDiv.innerHTML = optionsHtml;
+            
+            decisionContainer.style.display = 'block';
+            scenarioSelectionDiv.parentElement.style.display = 'none'; // Hide step 1
+            resultExplanationDiv.style.display = 'none'; // Hide previous results
+        }
+        
+        // Called when a decision is made
+        function showResult(scenarioKey, optionIndex) {
+            const option = scenarios[scenarioKey].options[optionIndex];
+            resultContent.innerHTML = `<p>${option.explanation}</p><p class="tag">${option.ethic}</p>`;
+            resultExplanationDiv.style.display = 'block';
+            window.scrollTo({ top: resultExplanationDiv.offsetTop - 80, behavior: 'smooth' });
+        }
+
+        // Reset the view to select a new scenario
+        function resetFilter() {
+             scenarioSelectionDiv.parentElement.style.display = 'block';
+             decisionContainer.style.display = 'none';
+             resultExplanationDiv.style.display = 'none';
+             
+             // Uncheck radio buttons
+             const radios = document.querySelectorAll('input[name="dilemma"]');
+             radios.forEach(radio => radio.checked = false);
+             window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Initial load
+        window.onload = loadScenarios;
+    </script>
+</body>
+</html>
