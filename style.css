@@ -83,6 +83,7 @@ body {
   text-decoration: none;
   color: var(--text);
   border: 1px solid transparent;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 .site-nav a:hover {
@@ -90,8 +91,8 @@ body {
 }
 
 .site-nav a.active {
-  background: color-mix(in oklab, var(--primary) 10%, var(--surface));
-  color: var(--primary);
+  background: var(--primary);
+  color: white;
   border-color: var(--primary-2);
 }
 
@@ -219,6 +220,7 @@ body {
 .loading {
   padding: 1.5rem;
   color: var(--muted);
+  text-align: center;
 }
 
 .error h2 {
@@ -234,8 +236,4 @@ body {
 
 .noscript {
   padding-top: 0.5rem;
-}
-
-.loaded > main {
-  padding: 0;
 }
