@@ -2,52 +2,123 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Ethische Szenarien – Digitale Transformation</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <style>
-    :root { color-scheme: light dark; }
-    body { font-family: system-ui, sans-serif; margin: 2rem; }
-    header { margin-bottom: 1.5rem; }
-    nav a { margin-right: 1rem; text-decoration: none; }
-    nav a.active { text-decoration: underline; font-weight: 600; }
-    #app { min-height: 40vh; }
-    footer { margin-top: 3rem; font-size: .9rem; opacity: .8; }
-  </style>
+  <link rel="stylesheet" href="style.css" />
+  <meta name="color-scheme" content="light dark" />
 </head>
 <body>
-  <header>
-    <h1>Ethische Szenarien zur Digitalen Transformation</h1>
+  <header class="site-header">
+    <div class="wrap">
+      <div class="brand">
+        <!-- Falls du ein Logo hast, ersetze den Text durch ein <img> -->
+        <span class="logo">∑</span>
+        <div class="brand-text">
+          <strong>Ethische Szenarien</strong>
+          <small>Digitale Transformation – Innovationsfonds BBW</small>
+        </div>
+      </div>
 
-    <!-- SPA-Navigation (Hash) -->
-    <nav id="nav">
-      <a href="#home">Start</a>
-      <a href="#ethikfilter">Ethikfilter</a>
-      <a href="#grundlagenethik">Grundlagenethik</a>
-      <a href="#szenarien">Szenarien</a>
-      <a href="#digitaltransform">Digitale Transformation</a>
-    </nav>
+      <nav id="nav" class="site-nav" aria-label="Hauptnavigation">
+        <a href="#home" data-route>Start</a>
+        <a href="#ethikfilter" data-route>Ethikfilter</a>
+        <a href="#grundlagenethik" data-route>Grundlagenethik</a>
+        <a href="#szenarien" data-route>Szenarien</a>
+        <a href="#digitaltransform" data-route>Digitale Transformation</a>
+      </nav>
+    </div>
 
-    <!-- Fallback-Links (funktionieren ohne JS) -->
-    <p style="margin-top:.5rem">
-      <small>Ohne JavaScript: 
-        <a href="ethikfilter/index.html">Ethikfilter</a> ·
-        <a href="grundlagenethik/index.html">Grundlagenethik</a> ·
-        <a href="szenarien/index.html">Szenarien</a>
-      </small>
-    </p>
+    <!-- Fallback nur ohne JS -->
+    <noscript>
+      <div class="wrap noscript">
+        <p><strong>Ohne JavaScript:</strong>
+          <a href="ethikfilter/index.html">Ethikfilter</a> ·
+          <a href="grundlagenethik/index.html">Grundlagenethik</a> ·
+          <a href="szenarien/index.html">Szenarien</a>
+        </p>
+      </div>
+    </noscript>
   </header>
 
-  <main id="app" aria-live="polite">
-    <h2>Willkommen</h2>
-    <p>Diese Lernumgebung zeigt unterschiedliche ethische Positionen, aktuelle Dilemmata der digitalen Transformation und Wege zur Klärung mit ethischen Prinzipien.</p>
+  <main id="app" class="wrap" aria-live="polite">
+    <!-- Startseite / Einführung (wird vom Router überschrieben, wenn Route != home) -->
+    <section class="hero">
+      <h1>Ethische Szenarien zur Digitalen Transformation</h1>
+      <p class="lead">
+        Diese Lernumgebung zeigt, wie unterschiedliche <b>ethische Positionen</b> wirken,
+        welche <b>herausfordernden Situationen</b> durch die digitale Transformation entstehen
+        und wie du diese mithilfe <b>ethischer Prinzipien</b> beurteilen und klären kannst.
+      </p>
+      <div class="hero-actions">
+        <a class="button primary" href="#szenarien">Zu den Szenarien</a>
+        <a class="button" href="#grundlagenethik">Grundlagenethik</a>
+      </div>
+    </section>
+
+    <section class="intro grid-2">
+      <div class="card">
+        <h2>Was machen wir hier?</h2>
+        <p>
+          Du analysierst reale Dilemmata der digitalen Welt (z.&nbsp;B. KI im Recruiting,
+          Überwachung, algorithmischer Bias) und wendest drei Blickwinkel an:
+          <span class="tag">Deontologie</span>, <span class="tag">Utilitarismus</span>,
+          <span class="tag">Tugendethik</span>.
+        </p>
+        <div class="callout info">
+          <strong>Ziel:</strong> begründete Urteile fällen, Perspektiven abwägen,
+          Handlungsoptionen formulieren.
+        </div>
+      </div>
+
+      <div class="card">
+        <h2>Wie arbeitest du?</h2>
+        <ol class="tight">
+          <li>Wähle ein <b>Szenario</b> und lies die Beschreibung.</li>
+          <li>Analysiere mit <b>Ethikfilter</b> &amp; <b>Grundlagenethik</b>.</li>
+          <li>Beantworte Reflexionsfragen, leite <b>Prinzipien</b> ab.</li>
+          <li>Formuliere eine <b>empfohlene Entscheidung</b> inkl. Begründung.</li>
+        </ol>
+        <div class="callout tip">
+          <strong>Tipp:</strong> Notiere Gegenargumente sichtbar – gute Ethik
+          macht Annahmen transparent.
+        </div>
+      </div>
+    </section>
+
+    <section class="grid-3">
+      <article class="card hoverable">
+        <h3>Ethikfilter</h3>
+        <p>Kompakte Fragen, die dir helfen, blinde Flecken zu finden
+           (Fairness, Transparenz, Verantwortung, Verhältnismäßigkeit …).</p>
+        <a class="button small" href="#ethikfilter">Öffnen</a>
+      </article>
+
+      <article class="card hoverable">
+        <h3>Grundlagenethik</h3>
+        <p>Deontologie, Utilitarismus, Tugendethik – übersichtlich erklärt
+           mit Beispielen und Formulierungs-Hilfen.</p>
+        <a class="button small" href="#grundlagenethik">Öffnen</a>
+      </article>
+
+      <article class="card hoverable">
+        <h3>Szenarien</h3>
+        <p>KI-Recruiting, Gesichtserkennung im öffentlichen Raum,
+           stereotype KI-Bilder u. a. – jeweils mit Leitfragen.</p>
+        <a class="button small" href="#szenarien">Öffnen</a>
+      </article>
+    </section>
   </main>
 
-  <footer>Teil des Innovationsfondsprojekts – BBW</footer>
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>Teil des Innovationsfondsprojekts – BBW</p>
+    </div>
+  </footer>
 
   <script>
-    // Route -> Datei (relative Pfade, GH Pages-kompatibel)
+    // Route -> Datei
     const ROUTES = {
-      home: null, // Starttext oben
+      home: null,
       ethikfilter: "ethikfilter/index.html",
       grundlagenethik: "grundlagenethik/index.html",
       szenarien: "szenarien/index.html",
@@ -58,49 +129,59 @@
     const nav = document.getElementById("nav");
 
     function setActiveLink(hash) {
-      [...nav.querySelectorAll("a")].forEach(a => {
+      [...nav.querySelectorAll("a[data-route]")].forEach(a => {
         a.classList.toggle("active", a.getAttribute("href") === hash);
       });
     }
 
+    function renderHome() {
+      // Nimmt den initialen HTML-Inhalt im <main> (Hero + Karten)
+      // und lässt ihn stehen. Nichts zu tun.
+    }
+
     async function loadRoute() {
-      const hash = (location.hash || "#home").slice(1);
-      setActiveLink("#" + hash);
+      const hash = (location.hash || "#home");
+      const key = hash.slice(1);
+      setActiveLink(hash);
 
-      const file = ROUTES[hash];
-      if (!file) { // Start/ Home
-        app.innerHTML = `
-          <h2>Willkommen</h2>
-          <p>Wähle oben einen Bereich: Ethikfilter, Grundlagenethik oder Szenarien.</p>`;
-        return;
-      }
+      const file = ROUTES[key];
+      if (!file) { renderHome(); return; }
 
-      app.innerHTML = "<p>Lade Inhalt …</p>";
+      app.innerHTML = `<div class="loading">Lade Inhalt …</div>`;
       try {
         const txt = await fetch(file, { cache: "no-store" }).then(r => {
           if (!r.ok) throw new Error(r.status + " " + r.statusText);
           return r.text();
         });
 
-        // Versuche nur den <main>-Inhalt zu übernehmen, sonst die ganze Datei
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(txt, "text/html");
+        const doc = new DOMParser().parseFromString(txt, "text/html");
         const main = doc.querySelector("main");
-        app.innerHTML = main ? main.innerHTML : txt;
+        const content = main ? main.innerHTML : txt;
+        app.innerHTML = `
+          <section class="loaded">
+            ${content}
+          </section>
+        `;
 
-        // Korrigiere relative Links der geladenen Seite, damit sie als Routen funktionieren
+        // Links innerhalb des geladenen Inhalts auf Routen umbiegen
         app.querySelectorAll("a[href]").forEach(a => {
-          const href = a.getAttribute("href");
-          if (href?.endsWith(".html")) {
-            // mappt z.B. szenarien/digitaltransform.html -> #digitaltransform
+          const href = a.getAttribute("href") || "";
+          if (href.endsWith(".html")) {
             if (href.includes("szenarien/digitaltransform.html")) a.href = "#digitaltransform";
             else if (href.includes("szenarien/index.html")) a.href = "#szenarien";
             else if (href.includes("ethikfilter/index.html")) a.href = "#ethikfilter";
             else if (href.includes("grundlagenethik/index.html")) a.href = "#grundlagenethik";
           }
         });
+        // Sanft nach oben
+        window.scrollTo({ top: 0, behavior: "smooth" });
       } catch (e) {
-        app.innerHTML = `<h2>404 – Nicht gefunden</h2><p>${file}</p>`;
+        app.innerHTML = `
+          <section class="error card">
+            <h2>404 – Nicht gefunden</h2>
+            <p><code>${file}</code></p>
+            <p><a class="button small" href="#home">Zurück zur Startseite</a></p>
+          </section>`;
       }
     }
 
@@ -109,4 +190,3 @@
   </script>
 </body>
 </html>
-
