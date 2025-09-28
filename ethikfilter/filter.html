@@ -1,171 +1,180 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <title>Ethikfilter anwenden</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Vorschau: Ethische Szenarien – Digitale Transformation</title>
+    <meta name="color-scheme" content="light dark" />
     <style>
-        /* General Enhancements */
-        .ethic-container {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
+        /* BASE CSS */
+        :root {
+            --bg: #ffffff;
+            --text: #0f1222;
+            --muted: #5b6178;
+            --primary: #5b57f1;
+            --primary-2: #433fd8;
+            --surface: #f5f6ff;
+            --line: #e7e8f5;
+            --ok: #2e7d32;
+            --info: #2962ff;
+            --warn: #b26a00;
         }
 
-        /* Step 1: Scenario Selection Styling */
-        #scenario-selection .scenario-label {
-            display: block;
-            padding: 1rem 1.1rem;
-            background: var(--surface);
-            border: 1px solid var(--line);
-            border-radius: 12px;
-            cursor: pointer;
-            transition: transform 0.1s ease, box-shadow 0.2s ease, border-color 0.2s ease;
-        }
-        #scenario-selection .scenario-label:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 15px color-mix(in oklab, var(--text) 5%, transparent);
-            border-color: var(--primary);
-        }
-        #scenario-selection input[type="radio"] {
-            display: none; /* Hide the default radio button */
-        }
-        #scenario-selection input[type="radio"]:checked + span {
-            font-weight: 600;
-            color: var(--primary);
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg: #0e1117;
+                --text: #e7ecff;
+                --muted: #a3a8c2;
+                --surface: #121725;
+                --line: #1e2435;
+                --primary: #8b88ff;
+                --primary-2: #6f6cff;
+            }
         }
 
-        /* Step 2: Decision Button Styling */
-        .decision-option {
-            display: block;
-            width: 100%;
-            text-align: left;
-            margin-bottom: 0.75rem;
-            background: var(--surface);
-            transition: background-color 0.2s ease, color 0.2s ease;
+        * { box-sizing: border-box; }
+        html, body { height: 100%; }
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: var(--text);
+            font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+            line-height: 1.5;
         }
-        .decision-option:hover {
-            background: var(--primary);
-            border-color: var(--primary-2);
-            color: white;
+
+        .wrap {
+            max-width: 1080px;
+            margin-inline: auto;
+            padding: 1.25rem;
         }
+
+        .site-header {
+            border-bottom: 1px solid var(--line);
+            position: sticky;
+            top: 0;
+            backdrop-filter: blur(6px);
+            background: color-mix(in oklab, var(--bg) 85%, transparent);
+            z-index: 10;
+        }
+        .site-header .wrap { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; }
+        .brand { display: flex; align-items: center; gap: 0.75rem; }
+        .logo { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 12px; background: var(--surface); color: var(--primary); font-weight: 800; font-size: 20px; }
+        .brand-text small { color: var(--muted); }
+        .site-nav { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 0.75rem; }
+        .site-nav a { padding: 0.5rem 0.75rem; border-radius: 10px; text-decoration: none; color: var(--text); border: 1px solid transparent; transition: background-color 0.2s ease, color 0.2s ease; }
+        .site-nav a:hover { background: var(--surface); }
+        .site-nav a.active { background: var(--primary); color: white; border-color: var(--primary-2); }
+        .hero { padding: 2rem 0 1rem 0; }
+        .hero h1 { font-size: clamp(1.8rem, 3.5vw, 3rem); margin: 0.25rem 0 1rem; }
+        .lead { font-size: 1.15rem; color: var(--muted); max-width: 70ch; }
+        .button { display: inline-block; padding: 0.6rem 0.9rem; border-radius: 10px; border: 1px solid var(--line); text-decoration: none; color: var(--text); background: var(--surface); font-weight: 600; }
+        .button:hover { filter: brightness(1.02); }
+        .button.primary { background: var(--primary); border-color: var(--primary-2); color: white; }
+        .button.small { padding: 0.45rem 0.7rem; font-size: 0.95rem; }
+        .card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 1rem 1.1rem; }
+        .callout { border-radius: 12px; padding: 0.75rem 0.9rem; margin: 0.75rem 0 0; border: 1px solid var(--line); background: color-mix(in oklab, var(--surface) 70%, transparent); }
+        .tag { display: inline-block; padding: 0.15rem 0.45rem; border-radius: 6px; background: color-mix(in oklab, var(--primary) 15%, var(--surface)); color: var(--primary-2); font-weight: 600; border: 1px solid var(--line); font-size: 0.9rem; margin-inline: 0.1rem; }
+        .site-footer { border-top: 1px solid var(--line); margin-top: 2rem; color: var(--muted); font-size: 0.95rem; }
         
-        /* Step 3: Result Color Coding */
-        #result-content {
-            border-left-width: 5px;
-            border-left-style: solid;
-            transition: background-color 0.3s ease, border-color 0.3s ease;
-        }
-
-        /* Color definitions for each ethic */
-        .ethic-deontologie {
-            border-left-color: #3b82f6; /* Blue */
-            background-color: color-mix(in oklab, #3b82f6 10%, var(--surface));
-        }
-        .ethic-utilitarismus {
-            border-left-color: #f97316; /* Orange */
-            background-color: color-mix(in oklab, #f97316 10%, var(--surface));
-        }
-        .ethic-tugendethik {
-            border-left-color: #8b5cf6; /* Purple */
-            background-color: color-mix(in oklab, #8b5cf6 10%, var(--surface));
-        }
-        .ethic-egoismus {
-            border-left-color: #6b7280; /* Gray */
-            background-color: color-mix(in oklab, #6b7280 10%, var(--surface));
-        }
-        .ethic-diskursethik {
-            border-left-color: #14b8a6; /* Teal */
-            background-color: color-mix(in oklab, #14b8a6 10%, var(--surface));
-        }
-        .ethic-unterlassung {
-             border-left-color: #a1a1aa; /* Muted Gray */
-            background-color: color-mix(in oklab, #a1a1aa 10%, var(--surface));
-        }
+        /* ETHIKFILTER-SPECIFIC CSS */
+        .ethic-container { display: flex; flex-direction: column; gap: 1rem; }
+        #scenario-selection .scenario-label { display: block; padding: 1rem 1.1rem; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; cursor: pointer; transition: transform 0.1s ease, box-shadow 0.2s ease, border-color 0.2s ease; }
+        #scenario-selection .scenario-label:hover { transform: translateY(-2px); box-shadow: 0 4px 15px color-mix(in oklab, var(--text) 5%, transparent); border-color: var(--primary); }
+        #scenario-selection input[type="radio"] { display: none; }
+        #scenario-selection input[type="radio"]:checked + span { font-weight: 600; color: var(--primary); }
+        .decision-option { display: block; width: 100%; text-align: left; margin-bottom: 0.75rem; background: var(--surface); transition: background-color 0.2s ease, color 0.2s ease; }
+        .decision-option:hover { background: var(--primary); border-color: var(--primary-2); color: white; }
+        #result-content { border-left-width: 5px; border-left-style: solid; transition: background-color 0.3s ease, border-color 0.3s ease; }
+        .ethic-deontologie { border-left-color: #3b82f6; background-color: color-mix(in oklab, #3b82f6 10%, var(--surface)); }
+        .ethic-utilitarismus { border-left-color: #f97316; background-color: color-mix(in oklab, #f97316 10%, var(--surface)); }
+        .ethic-tugendethik { border-left-color: #8b5cf6; background-color: color-mix(in oklab, #8b5cf6 10%, var(--surface)); }
+        .ethic-egoismus { border-left-color: #6b7280; background-color: color-mix(in oklab, #6b7280 10%, var(--surface)); }
+        .ethic-diskursethik { border-left-color: #14b8a6; background-color: color-mix(in oklab, #14b8a6 10%, var(--surface)); }
+        .ethic-unterlassung { border-left-color: #a1a1aa; background-color: color-mix(in oklab, #a1a1aa 10%, var(--surface)); }
     </style>
 </head>
 <body>
-    <main>
+    <header class="site-header">
+        <div class="wrap">
+            <div class="brand">
+                <span class="logo">∑</span>
+                <div class="brand-text">
+                    <strong>Ethische Szenarien</strong>
+                    <small>Digitale Transformation – Innovationsfonds BBW</small>
+                </div>
+            </div>
+            <nav class="site-nav" aria-label="Hauptnavigation">
+                <a href="#">Start</a>
+                <a href="#" class="active">Ethikfilter</a>
+                <a href="#">Grundlagenethik</a>
+                <a href="#">Szenarien</a>
+            </nav>
+        </div>
+    </header>
+
+    <main id="app" class="wrap" aria-live="polite">
         <section class="hero">
             <h1>Ethikfilter: Was ist deine Haltung?</h1>
             <p class="lead">Wähle ein Szenario, triff eine Entscheidung und finde heraus, welche ethische Position dahintersteckt.</p>
         </section>
 
         <div class="ethic-container">
+            <!-- SCHRITT 1: SZENARIO WÄHLEN -->
             <div id="step1-container" class="card">
                 <h2>Schritt 1: Wähle ein Dilemma</h2>
                 <div id="scenario-selection">
-                    </div>
+                    <!-- Scenarios will be loaded here by JavaScript -->
+                </div>
             </div>
             
+            <!-- SCHRITT 2: ENTSCHEIDUNG TREFFEN (initially hidden) -->
             <div id="step2-container" class="card" style="display: none;">
                 <h2 id="scenario-title"></h2>
                 <p id="scenario-description" style="color: var(--muted);"></p>
                 <hr style="border: none; border-top: 1px solid var(--line); margin: 1rem 0;">
                 <h3>Schritt 2: Wie würdest du entscheiden?</h3>
                 <div id="decision-options">
-                    </div>
+                    <!-- Decision options will be loaded here -->
+                </div>
             </div>
 
+            <!-- SCHRITT 3: ERGEBNIS (initially hidden) -->
             <div id="step3-container" style="display: none;">
                 <div class="card">
                     <h2 style="margin-top: 0;">Die Haltung hinter deiner Entscheidung</h2>
                     <div id="result-content" class="callout">
-                        </div>
+                        <!-- The explanation will be shown here -->
+                    </div>
                      <button class="button small" onclick="resetFilter()" style="margin-top: 1rem;">Neues Szenario wählen</button>
                 </div>
             </div>
         </div>
     </main>
 
+    <footer class="site-footer">
+        <div class="wrap">
+            <p>Teil des Innovationsfondsprojekts – BBW</p>
+        </div>
+    </footer>
+
     <script>
-        // Data has been updated with a short 'id' for CSS class mapping
         const scenarios = {
             'dt_1': {
                 title: 'Autonomes Fahren: Unvermeidbarer Unfall',
                 description: 'Ein autonomes Fahrzeug hat Bremsversagen. Es muss sich entscheiden: Entweder es überfährt eine einzelne Person auf der einen Spur oder eine Gruppe von fünf Personen auf der anderen Spur.',
                 options: [
-                    {
-                        text: 'In die Gruppe von fünf Personen steuern, um den Einzelnen zu retten.',
-                        ethic: 'Deontologie (Pflichtethik)',
-                        id: 'deontologie',
-                        explanation: 'Diese Entscheidung folgt einer <strong>deontologischen</strong> Haltung. Hier zählt die Handlung an sich, nicht die Konsequenz. Eine mögliche Pflicht könnte lauten: "Opfere niemals eine Minderheit für eine Mehrheit". Das aktive Eingreifen wird als moralisch falsch angesehen, unabhängig von der Anzahl der Opfer.'
-                    },
-                    {
-                        text: 'Auf die einzelne Person zusteuern, um die fünf Personen zu retten.',
-                        ethic: 'Utilitarismus (Nutzethik)',
-                        id: 'utilitarismus',
-                        explanation: 'Diese Entscheidung ist klar <strong>utilitaristisch</strong>. Das Ziel ist die Maximierung des Gesamtnutzens bzw. die Minimierung des Gesamtschadens. Der Tod von einer Person ist rechnerisch "besser" als der Tod von fünf Personen. Die Konsequenz der Handlung ist das einzige, was zählt.'
-                    },
-                    {
-                        text: 'Den ursprünglichen Kurs beibehalten, egal was passiert.',
-                        ethic: 'Unterlassungsprinzip / Deontologie',
-                        id: 'unterlassung',
-                        explanation: 'Diese Haltung kann ebenfalls <strong>deontologisch</strong> begründet sein (Prinzip der Unterlassung). Indem die KI nicht aktiv in das Geschehen eingreift, begeht sie keine Tötungshandlung. Sie lässt das Geschehen seinen Lauf und lehnt die Verantwortung für die Konsequenz ab, da die Handlung des Eingreifens an sich vermieden wird.'
-                    }
+                    { text: 'In die Gruppe von fünf Personen steuern, um den Einzelnen zu retten.', ethic: 'Deontologie (Pflichtethik)', id: 'deontologie', explanation: 'Diese Entscheidung folgt einer <strong>deontologischen</strong> Haltung. Hier zählt die Handlung an sich, nicht die Konsequenz. Eine mögliche Pflicht könnte lauten: "Opfere niemals eine Minderheit für eine Mehrheit". Das aktive Eingreifen wird als moralisch falsch angesehen, unabhängig von der Anzahl der Opfer.' },
+                    { text: 'Auf die einzelne Person zusteuern, um die fünf Personen zu retten.', ethic: 'Utilitarismus (Nutzethik)', id: 'utilitarismus', explanation: 'Diese Entscheidung ist klar <strong>utilitaristisch</strong>. Das Ziel ist die Maximierung des Gesamtnutzens bzw. die Minimierung des Gesamtschadens. Der Tod von einer Person ist rechnerisch "besser" als der Tod von fünf Personen. Die Konsequenz der Handlung ist das einzige, was zählt.' },
+                    { text: 'Den ursprünglichen Kurs beibehalten, egal was passiert.', ethic: 'Unterlassungsprinzip / Deontologie', id: 'unterlassung', explanation: 'Diese Haltung kann ebenfalls <strong>deontologisch</strong> begründet sein (Prinzip der Unterlassung). Indem die KI nicht aktiv in das Geschehen eingreift, begeht sie keine Tötungshandlung. Sie lässt das Geschehen seinen Lauf und lehnt die Verantwortung für die Konsequenz ab, da die Handlung des Eingreifens an sich vermieden wird.' }
                 ]
             },
             'au_2': {
                 title: 'Mobbing am Arbeitsplatz',
                 description: 'Du beobachtest, wie ein Kollege von einer Gruppe, zu der auch dein Vorgesetzter gehört, systematisch ausgegrenzt wird. Ein Eingreifen könnte deine eigene Position gefährden.',
                 options: [
-                    {
-                        text: 'Die Mobber direkt ansprechen und den Vorfall melden, auch auf die Gefahr hin, den Job zu verlieren.',
-                        ethic: 'Tugendethik / Deontologie',
-                        id: 'tugendethik',
-                        explanation: 'Diese Entscheidung kann <strong>tugendethisch</strong> oder <strong>deontologisch</strong> begründet werden. Ein <strong>tugendhafter</strong> Mensch würde aus Zivilcourage und Gerechtigkeitssinn handeln. <strong>Deontologisch</strong> gesehen erfüllst du die Pflicht, Unrecht nicht zu tolerieren und für die Würde deiner Mitmenschen einzustehen.'
-                    },
-                    {
-                        text: 'Nichts tun, aus Angst vor negativen Konsequenzen für die eigene Karriere.',
-                        ethic: 'Ethischer Egoismus',
-                        id: 'egoismus',
-                        explanation: 'Diese Entscheidung entspricht dem <strong>ethischen Egoismus</strong>. Du stellst dein eigenes Wohl (Sicherheit des Arbeitsplatzes, Vermeidung von Konflikten) über das Wohl des gemobbten Kollegen. Die moralische Bewertung deiner Handlung richtet sich ausschliesslich nach dem Nutzen für dich selbst.'
-                    },
-                    {
-                        text: 'Das Gespräch mit dem betroffenen Kollegen suchen, um gemeinsam eine Lösung zu finden.',
-                        ethic: 'Diskursethik / Kommunitarismus',
-                        id: 'diskursethik',
-                        explanation: 'Diese Haltung folgt den Prinzipien der <strong>Diskursethik</strong>. Anstatt einer konfrontativen oder passiven Lösung suchst du den Dialog und eine von allen Betroffenen getragene Lösung. Es geht darum, durch vernünftige Kommunikation einen Konsens zu finden.'
-                    }
+                    { text: 'Die Mobber direkt ansprechen und den Vorfall melden, auch auf die Gefahr hin, den Job zu verlieren.', ethic: 'Tugendethik / Deontologie', id: 'tugendethik', explanation: 'Diese Entscheidung kann <strong>tugendethisch</strong> oder <strong>deontologisch</strong> begründet werden. Ein <strong>tugendhafter</strong> Mensch würde aus Zivilcourage und Gerechtigkeitssinn handeln. <strong>Deontologisch</strong> gesehen erfüllst du die Pflicht, Unrecht nicht zu tolerieren und für die Würde deiner Mitmenschen einzustehen.' },
+                    { text: 'Nichts tun, aus Angst vor negativen Konsequenzen für die eigene Karriere.', ethic: 'Ethischer Egoismus', id: 'egoismus', explanation: 'Diese Entscheidung entspricht dem <strong>ethischen Egoismus</strong>. Du stellst dein eigenes Wohl (Sicherheit des Arbeitsplatzes, Vermeidung von Konflikten) über das Wohl des gemobbten Kollegen. Die moralische Bewertung deiner Handlung richtet sich ausschliesslich nach dem Nutzen für dich selbst.' },
+                    { text: 'Das Gespräch mit dem betroffenen Kollegen suchen, um gemeinsam eine Lösung zu finden.', ethic: 'Diskursethik / Kommunitarismus', id: 'diskursethik', explanation: 'Diese Haltung folgt den Prinzipien der <strong>Diskursethik</strong>. Anstatt einer konfrontativen oder passiven Lösung suchst du den Dialog und eine von allen Betroffenen getragene Lösung. Es geht darum, durch vernünftige Kommunikation einen Konsens zu finden.' }
                 ]
             }
         };
@@ -173,7 +182,6 @@
         const step1 = document.getElementById('step1-container');
         const step2 = document.getElementById('step2-container');
         const step3 = document.getElementById('step3-container');
-
         const scenarioSelectionDiv = document.getElementById('scenario-selection');
         const decisionOptionsDiv = document.getElementById('decision-options');
         const scenarioTitle = document.getElementById('scenario-title');
@@ -196,13 +204,11 @@
             const scenario = scenarios[key];
             scenarioTitle.textContent = scenario.title;
             scenarioDescription.textContent = scenario.description;
-            
             let optionsHtml = '';
             scenario.options.forEach((option, index) => {
                 optionsHtml += `<button class="button decision-option" onclick="showResult('${key}', ${index})">${option.text}</button>`;
             });
             decisionOptionsDiv.innerHTML = optionsHtml;
-            
             step1.style.display = 'none';
             step2.style.display = 'block';
             step3.style.display = 'none';
@@ -210,13 +216,10 @@
         
         function showResult(scenarioKey, optionIndex) {
             const option = scenarios[scenarioKey].options[optionIndex];
-            
-            // Cleanup and apply new class
             resultContent.classList.remove(...ethicClasses);
             if(option.id) {
                 resultContent.classList.add(`ethic-${option.id}`);
             }
-            
             resultContent.innerHTML = `<p>${option.explanation}</p><p class="tag">${option.ethic}</p>`;
             step3.style.display = 'block';
             window.scrollTo({ top: step3.offsetTop - 80, behavior: 'smooth' });
@@ -226,7 +229,6 @@
             step1.style.display = 'block';
             step2.style.display = 'none';
             step3.style.display = 'none';
-             
              const radios = document.querySelectorAll('input[name="dilemma"]');
              radios.forEach(radio => radio.checked = false);
              window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -236,3 +238,4 @@
     </script>
 </body>
 </html>
+
