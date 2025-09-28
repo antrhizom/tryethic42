@@ -1,1 +1,112 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <title>Ethische Szenarien – Digitale Transformation</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root { color-scheme: light dark; }
+    body { font-family: system-ui, sans-serif; margin: 2rem; }
+    header { margin-bottom: 1.5rem; }
+    nav a { margin-right: 1rem; text-decoration: none; }
+    nav a.active { text-decoration: underline; font-weight: 600; }
+    #app { min-height: 40vh; }
+    footer { margin-top: 3rem; font-size: .9rem; opacity: .8; }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Ethische Szenarien zur Digitalen Transformation</h1>
+
+    <!-- SPA-Navigation (Hash) -->
+    <nav id="nav">
+      <a href="#home">Start</a>
+      <a href="#ethikfilter">Ethikfilter</a>
+      <a href="#grundlagenethik">Grundlagenethik</a>
+      <a href="#szenarien">Szenarien</a>
+      <a href="#digitaltransform">Digitale Transformation</a>
+    </nav>
+
+    <!-- Fallback-Links (funktionieren ohne JS) -->
+    <p style="margin-top:.5rem">
+      <small>Ohne JavaScript: 
+        <a href="ethikfilter/index.html">Ethikfilter</a> ·
+        <a href="grundlagenethik/index.html">Grundlagenethik</a> ·
+        <a href="szenarien/index.html">Szenarien</a>
+      </small>
+    </p>
+  </header>
+
+  <main id="app" aria-live="polite">
+    <h2>Willkommen</h2>
+    <p>Diese Lernumgebung zeigt unterschiedliche ethische Positionen, aktuelle Dilemmata der digitalen Transformation und Wege zur Klärung mit ethischen Prinzipien.</p>
+  </main>
+
+  <footer>Teil des Innovationsfondsprojekts – BBW</footer>
+
+  <script>
+    // Route -> Datei (relative Pfade, GH Pages-kompatibel)
+    const ROUTES = {
+      home: null, // Starttext oben
+      ethikfilter: "ethikfilter/index.html",
+      grundlagenethik: "grundlagenethik/index.html",
+      szenarien: "szenarien/index.html",
+      digitaltransform: "szenarien/digitaltransform.html",
+    };
+
+    const app = document.getElementById("app");
+    const nav = document.getElementById("nav");
+
+    function setActiveLink(hash) {
+      [...nav.querySelectorAll("a")].forEach(a => {
+        a.classList.toggle("active", a.getAttribute("href") === hash);
+      });
+    }
+
+    async function loadRoute() {
+      const hash = (location.hash || "#home").slice(1);
+      setActiveLink("#" + hash);
+
+      const file = ROUTES[hash];
+      if (!file) { // Start/ Home
+        app.innerHTML = `
+          <h2>Willkommen</h2>
+          <p>Wähle oben einen Bereich: Ethikfilter, Grundlagenethik oder Szenarien.</p>`;
+        return;
+      }
+
+      app.innerHTML = "<p>Lade Inhalt …</p>";
+      try {
+        const txt = await fetch(file, { cache: "no-store" }).then(r => {
+          if (!r.ok) throw new Error(r.status + " " + r.statusText);
+          return r.text();
+        });
+
+        // Versuche nur den <main>-Inhalt zu übernehmen, sonst die ganze Datei
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(txt, "text/html");
+        const main = doc.querySelector("main");
+        app.innerHTML = main ? main.innerHTML : txt;
+
+        // Korrigiere relative Links der geladenen Seite, damit sie als Routen funktionieren
+        app.querySelectorAll("a[href]").forEach(a => {
+          const href = a.getAttribute("href");
+          if (href?.endsWith(".html")) {
+            // mappt z.B. szenarien/digitaltransform.html -> #digitaltransform
+            if (href.includes("szenarien/digitaltransform.html")) a.href = "#digitaltransform";
+            else if (href.includes("szenarien/index.html")) a.href = "#szenarien";
+            else if (href.includes("ethikfilter/index.html")) a.href = "#ethikfilter";
+            else if (href.includes("grundlagenethik/index.html")) a.href = "#grundlagenethik";
+          }
+        });
+      } catch (e) {
+        app.innerHTML = `<h2>404 – Nicht gefunden</h2><p>${file}</p>`;
+      }
+    }
+
+    window.addEventListener("hashchange", loadRoute);
+    window.addEventListener("DOMContentLoaded", loadRoute);
+  </script>
+</body>
+</html>
 
